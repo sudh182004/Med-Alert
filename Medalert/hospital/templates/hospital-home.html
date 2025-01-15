@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+    
+    <!-- Boxicons and Bootstrap -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+
+    
+    <title>Med Alert</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+<body>
+    
+<nav>
+      <div class="logo">
+        <span class="logo-name">Med Alert</span>
+      </div>
+    
+      <div class="user-profile">
+        <a class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false">
+          👤 Profiles
+        </a>
+        <a class="btn btn-light" <a href="{% url 'logout' %}">Logout</a>>
+         
+        </a>
+        <ul class="dropdown-menu text-white">
+          {% if profiles %}
+            {% for profile in profiles %}
+               <li class="dropdown-item">
+               <strong>{{ profile.user }} Hospital</strong><br />
+               Address: {{ profile.address }}<br />
+               Latitude: {{ profile.latitude }}<br />
+               Longitude: {{ profile.longitude }}
+               <p class="uniqueid">{{profile.id}}</p>
+              </li>
+              {% endfor %}
+              {% else %} <p style ="color:black; text-align:center;">No Uer Found</p>
+              {% endif %}
+        </ul>
+      </div>
+    </div>
+</nav>
+
+{% comment %} Main content {% endcomment %}
+
+  <div id="alert-container" class="card" style="text-align:center"></div>
+  <button id="dummyButton" style="display: none;">Play Sound</button> 
+  <audio id="bellSound" src="{% static 'hospital/al.mp3' %}" preload="auto"></audio>
+
+
+{% comment %} <audio id="sos-sound" src="/static/sos.mp3" loop></audio> {% endcomment %}
+
+
+
+    
+    
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-links">
+              <a href="#">Home</a>
+              <a href="#">About Us</a>
+              <a href="#">Services</a>
+              <a href="#">Contact</a>
+          </div>
+          <div class="footer-social">
+              <a href="#" aria-label="Facebook">Facebook</a>
+              <a href="#" aria-label="Twitter">Twitter</a>
+              <a href="#" aria-label="Instagram">Instagram</a>
+          </div>
+      </div>
+      <div class="footer-bottom">
+          &copy; 2024 Med Alert. All rights reserved.
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+     <script src="{% static "hospital/app2.js" %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>  

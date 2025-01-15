@@ -1,0 +1,156 @@
+body {
+    font-family: sans-serif;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f6735d;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90%;
+    max-width: 800px;
+    min-height: 400px; /* Adjusted for better scaling */
+}
+.container-h {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 10px;
+    justify-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90%;
+    max-width: 800px;
+    min-height: 50px;
+    margin-top: -140px;
+}
+
+.form-section, .image-section {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.form-section {
+    flex: 1;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    width: 50px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input[type="password"] {
+    position: relative;
+}
+
+
+.remember {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.forgot-password {
+    text-align: center;
+   margin-top: -2px;
+    margin-bottom: 10px;
+}
+
+.login-div-h{
+    text-align: center;
+   margin-top:  20px;
+    margin-bottom: 10px;
+    font-size: large;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.login-with {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.image-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+
+.image-section img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        flex-direction: row;
+    }
+
+    .form-section {
+        width: 50%;
+    }
+
+    .image-section {
+        width: 50%;
+    }
+
+    .buttons {
+        flex-direction: row;
+    }
+}
+.btn_signin_hospital{
+    margin-top: 22px;
+    background-color: rgb(231, 107, 24);
+    font-size: medium;
+}

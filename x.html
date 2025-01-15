@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <script
+        src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    ></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+        #locate-icon {
+            font-size: 24px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="locate-icon">📍</div>
+
+    <script>
+        let map, currentloc;
+
+        // Initialize the map
+        function initializeMap() {
+            map = L.map("map").setView([51.505, -0.09], 13); // Default location (London)
+
+            // Add OpenStreetMap tiles
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+            }).addTo(map);
+        }
+
+        // Function to get an accurate location
+        function getAccurateCurrentPosition(geolocationSuccess, geolocationError, geoprogress, options = {}) {
+            let lastCheckedPosition,
+                locationEventCount = 0,
+                watchID,
+                timerID;
+
+            const checkLocation = function (position) {
+                lastCheckedPosition = position;
+                locationEventCount += 1;
+
+                if (position.coords.accuracy <= options.desiredAccuracy && locationEventCount > 1) {
+                    clearTimeout(timerID);
+                    navigator.geolocation.clearWatch(watchID);
+                    foundPosition(position);
+                } else {
+                    geoprogress(position);
+                }
+            };
+
+            const stopTrying = function () {
+                navigator.geolocation.clearWatch(watchID);
+                foundPosition(lastCheckedPosition);
+            };
+
+            const onError = function (error) {
+                clearTimeout(timerID);
+                navigator.geolocation.clearWatch(watchID);
+                geolocationError(error);
+            };
+
+            const foundPosition = function (position) {
+                geolocationSuccess(position);
+            };
+
+            options.maxWait = options.maxWait || 10000;
+            options.desiredAccuracy = options.desiredAccuracy || 20;
+            options.timeout = options.timeout || options.maxWait;
+            options.maximumAge = 0;
+            options.enableHighAccuracy = true;
+
+            watchID = navigator.geolocation.watchPosition(checkLocation, onError, options);
+            timerID = setTimeout(stopTrying, options.maxWait);
+        }
+
+        // Success callback
+        function onSuccess(position) {
+            const el = document.getElementById("locate-icon");
+            el.textContent = "📍"; // Change icon back to 'pinpoint'
+
+            const marker = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
+
+            // Add marker to the map
+            if (currentloc !== undefined) {
+                map.removeLayer(currentloc);
+            }
+            currentloc = L.marker([marker.lat, marker.lng]);
+            currentloc.addTo(map);
+            map.panTo([marker.lat, marker.lng]);
+        }
+
+        // Error callback
+        function onError(error) {
+            alert("Error code: " + error.code + "\nMessage: " + error.message);
+        }
+
+        // Progress callback
+        function onWait() {
+            const el = document.getElementById("locate-icon");
+            el.textContent = "⌛"; // Change icon to indicate waiting
+            console.log("Waiting for location...");
+        }
+
+        // Mark location on the map
+        function markLocation() {
+            getAccurateCurrentPosition(onSuccess, onError, onWait);
+        }
+
+        // Add event listener to the locate-icon
+        document.getElementById("locate-icon").addEventListener("click", markLocation);
+
+        // Initialize map on load
+        initializeMap();
+    </script>
+</body>
+</html>
