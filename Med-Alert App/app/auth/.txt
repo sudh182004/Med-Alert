@@ -1,0 +1,116 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Button, StyleSheet, Text, View } from 'react-native';
+
+export default function Dashboard() {
+  const [location, setLocation] = useState<string>('Fetching location...');
+  const [loading, setLoading] = useState(true);
+  const [sosCount, setSosCount] = useState(0);
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState('');
+
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      const reports = JSON.parse(await AsyncStorage.getItem('sosReports')) || [];
+      setSosCount(reports.length);
+
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setLocation('Location permission denied');
+        setLoading(false);
+        return;
+      }
+
+     
+
+      let loc = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = loc.coords;
+
+      let address = 'Unknown location';
+      try {
+        const place = await Location.reverseGeocodeAsync({ latitude, longitude });
+        if (place.length > 0) {
+          const info = place[0];
+          address = `${info.name || ''} ${info.street || ''}, ${info.city || info.subregion || ''}, ${info.region || ''}, ${info.country || ''}`.trim();
+        } else {
+          address = `Approx: https://maps.google.com/?q=${latitude},${longitude}`;
+        }
+      } catch {
+        address = `Approx: https://maps.google.com/?q=${latitude},${longitude}`;
+      }
+
+      setLocation(address);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" />
+        <Text>Loading dashboard...</Text>
+      </View>
+    );
+  }
+
+   const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('user');
+      Alert.alert('Logout', 'You have been logged out successfully.');
+      router.replace('/auth/login'); // redirect to login page
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong while logging out.');
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>📊 Dashboard</Text>
+        <Text style={styles.email}>Logged in as: {userEmail}</Text>
+        <View style={{ marginTop: 20 }}>
+        <Button title="Logout" color="#d9534f" onPress={handleLogout} />
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.label}>Current Location:</Text>
+        <Text style={styles.value}>{location}</Text>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.label}>Total SOS Reports Sent:</Text>
+        <Text style={styles.value}>{sosCount}</Text>
+      </View>
+
+      <Button title="🔄 Refresh" onPress={loadDashboardData} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
+  title: { fontSize: 28, fontWeight: '600', marginBottom: 20, textAlign: 'center' },
+  card: {
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    elevation: 2,
+  },
+  label: { fontSize: 16, color: '#333' },
+  value: { fontSize: 18, fontWeight: 'bold', marginTop: 5 },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+   email: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+});
