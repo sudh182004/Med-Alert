@@ -14,11 +14,12 @@ class UserProfile(models.Model):
     def __str__(self):
         return f"Profile of {self.user.username}"
     
+
 class HospitalAlert(models.Model):
-    name = models.TextField(blank=True,null=True)
-    hospital = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    name = models.TextField(blank=True, null=True)
+    hospital = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     message = models.TextField()
-    file_path = models.FileField(upload_to='reports_hospital/', blank=True, null=True)  # Adjust the path
+    file_path = models.FileField(upload_to='reports_hospital/', blank=True, null=True)  # File Uploads
     timestamp = models.DateTimeField(auto_now_add=True)
     is_confirmed = models.BooleanField(default=False)
 
@@ -28,11 +29,11 @@ class HospitalAlert(models.Model):
     emergency_contact_numbers = models.TextField(blank=True, null=True)  # Store as comma-separated numbers
     emergency_contact_relationships = models.TextField(blank=True, null=True)  # Store relationships as comma-separated values
 
-
     def __str__(self):
         return f"Alert for {self.hospital.user} at {self.timestamp}"
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance)
+        UserProfile.objects.create(user=instance)  

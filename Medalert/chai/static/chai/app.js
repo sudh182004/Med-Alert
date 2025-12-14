@@ -1,11 +1,12 @@
 const firebaseConfig = {
-  apiKey: "Api_key",
-  authDomain: "....",
-  projectId: "....",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "...."
-};
+    apiKey: "AIzaSyDqgdLkG9KyuNU4hgRf2ZIvtzpnEGkmu8E",
+    authDomain: "my-new-ae8f5.firebaseapp.com",
+    projectId: "my-new-ae8f5",
+    storageBucket: "my-new-ae8f5.firebasestorage.app",
+    messagingSenderId: "1055383171756",
+    appId: "1:1055383171756:web:0bcfa46ae246854af5e509"
+  };
+  
   const app = firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   
@@ -78,6 +79,7 @@ const firebaseConfig = {
       .then((doc) => {
         if (doc.exists) {
           const userData = doc.data();
+          console.log(userData)
           let email = document.querySelector('.email')
           let emergency_contact_number = document.querySelector('.emergency_contact_number')
           let gender = document.querySelector('.gender')
@@ -180,6 +182,7 @@ const firebaseConfig = {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           latitude.value=`${position.coords.latitude}`
+          // latitude.value=77.0244608
           longitude.value=`${position.coords.longitude}`
           alert("Location access granted!");
           // message.value = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`

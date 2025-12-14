@@ -176,7 +176,7 @@ def generate_combined_report(data_summary, output_file):
     logger.info(f"Generated report: {output_file}")
 
 # PDF processing function
-def process_multiple_pdfs(pdf_paths, output_dir="media/reports"):
+def process_multiple_pdfs(pdf_paths, output_dir="media/"):
     os.makedirs(output_dir, exist_ok=True)
     data_summary = defaultdict(lambda: {"trend": []})
     
@@ -200,24 +200,31 @@ def process_multiple_pdfs(pdf_paths, output_dir="media/reports"):
     generate_combined_report(data_summary, combined_report_path)
     logger.info(f"Report generated: {combined_report_path}")
 
+from django.http import FileResponse
 # Django view function
 def upload_view(request):
     if request.method == 'POST' and request.FILES.getlist('pdf_files'):
-        # Retrieve files from the request
         files = request.FILES.getlist('pdf_files')
         
-        # Call the function to process the PDFs
+        # Process the PDFs
         process_multiple_pdfs(files)
         
-        # After processing the files, return an HttpResponse indicating success
-        return render(request, 'home.html')
-        user = request.user
+        # Path of the generated combined report
+        combined_report_path = "media/reports/Combined_Health_Reports.pdf"
+        
+        # Check if the file exists
+        if os.path.exists(combined_report_path):
+            # Return it as a downloadable response
+            return FileResponse(
+                open(combined_report_path, 'rb'), 
+                as_attachment=True,  # triggers download
+                filename="Combined_Health_Reports.pdf"
+            )
+        else:
+            return HttpResponse("PDF not generated", status=404)
 
-    # If the request is GET, render the upload form
+    # GET request renders upload form
     return render(request, 'home.html')
-
-
-
 
 
 

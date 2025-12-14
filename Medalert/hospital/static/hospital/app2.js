@@ -8,7 +8,7 @@ const alertContainer = document.querySelector(".card");
  let displayedAlertIds = new Set();  // Store displayed alert IDs to prevent duplicates
 
  function fetchAlerts() {
-   fetch(`http://127.0.0.1:8000/hospital/get_alerts/${hospitalId}/`)
+   fetch(`http://127.0.0.1:8000/hospital/api/alerts/?id=${hospitalId}/`)
      .then(response => {
        if (!response.ok) {
          alert("Please wait, fetching data...");
@@ -42,7 +42,7 @@ const alertContainer = document.querySelector(".card");
   <h5>Status: ${(alert.is_confirmed) ? 'Completed' : 'Pending'}</h5>
   
   ${alert.file_path ? `
-    <h6>Download Report: <a href="/media/${alert.file_path}" download>Click here to download</a></h6>
+    <h6>Download Report: <a href="${alert.file_path}" download>Click here to download</a></h6>
   ` : ''}
 
   <!-- Dropdown for Additional Details -->
@@ -140,7 +140,7 @@ function confirmAction(button, alertId) {
   }, 500);
 
   // Send the confirmation request
-  fetch(`http://127.0.0.1:8000/hospital/get_alerts/${alertId}/`, {
+  fetch(`http://127.0.0.1:8000/hospital/confirm_alert/${alertId}/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
