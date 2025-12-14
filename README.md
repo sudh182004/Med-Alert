@@ -26,7 +26,7 @@ MedAlert is a **real-time medical emergency (SOS) platform** designed to deliver
 
 ## 📱 Mobile App Screenshots
 
-| SOS Screen | Health Data | Emergency Flow |
+| Dashboard | SOS Screen | Ai Insights |
 |----------|-------------|----------------|
 | ![App Screenshot 1](images/a1.png) | ![App Screenshot 2](images/a2.png) | ![App Screenshot 3](images/a3.png) |
 
@@ -34,9 +34,9 @@ MedAlert is a **real-time medical emergency (SOS) platform** designed to deliver
 
 ## 🏥 Hospital Dashboard Screenshots
 
-| Dashboard Overview | Patient Insights |
+| Login | Patient Insights |
 |-------------------|------------------|
-| ![Hospital Dashboard 1](images/h_d1.png) | ![Hospital Dashboard 2](images/h_d2.png) |
+| ![Hospital Dashboard 1](images/h_d2.png) | ![Hospital Dashboard 2](images/h_d1.png) |
 
 ---
 
