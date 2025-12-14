@@ -100,8 +100,8 @@ from twilio.rest import Client
 
 def send_twilio_message(patient_name, hospital_name, hospital_location, accident_location, to):
     # Twilio credentials (replace with actual credentials or store them securely)
-    account_sid = 'ACd517027bdd1485f3c4be99e4f72a9510'  # Replace with your Twilio Account SID
-    auth_token = 'ba94bb7d0e640d86b535a674bdf89926'  # Replace with your Twilio Auth Token
+    account_sid = 'key_sid'  # Replace with your Twilio Account SID
+    auth_token = 'key_token'  # Replace with your Twilio Auth Token
     from_ = 'whatsapp:+14155238886'  # Replace with your Twilio WhatsApp number
 
     # Format the message to include all the details
